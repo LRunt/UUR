@@ -1,25 +1,24 @@
 package model;
 
-import java.time.LocalTime;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import utils.MySimpleDoubleProperty;
 
 public class Osoba {
 	
 	/** jmeno brigadnika */
 	private final StringProperty jmeno = new SimpleStringProperty();
 	/** odpracovany cas */
-	private final ObjectProperty<LocalTime> cas = new SimpleObjectProperty<>();
+	private final DoubleProperty cas = new MySimpleDoubleProperty();
 
 	/**
 	 * Konstruktor brigadnikqa
 	 * @param jmeno jmeno brigadnika
 	 * @param cas odpracovany cas
 	 */
-	public Osoba(String jmeno, LocalTime cas) {
+	public Osoba(String jmeno, double cas) {
 		setJmeno(jmeno);
 		setCas(cas);
 	}
@@ -38,15 +37,15 @@ public class Osoba {
 	}
 	
 	//-----------cas----------------------------------
-	public void setCas(LocalTime novyCas) {
+	public void setCas(double novyCas) {
 		cas.set(novyCas);
 	}
 	
-	public LocalTime getCas() {
+	public double getCas() {
 		return cas.get();
 	}
 	
-	public ObjectProperty<LocalTime> casProperty(){
+	public DoubleProperty casProperty(){
 		return cas;
 	}
 }

@@ -1,9 +1,14 @@
 package gui;
+import java.time.LocalDate;
+
+import bunky.FormattedDateTableCell;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Brigada;
@@ -19,6 +24,11 @@ public class Main extends Application{
 	private TableView<Brigada> tabulka;
 	private DataModel model = new DataModel();
 	public static Message zprava = new Message();
+	
+	public void init() {
+		System.out.println("Inicializace");
+		model.initializeModel();
+	}
 
 	/**
 	 * Vstupni cast programu
@@ -57,8 +67,14 @@ public class Main extends Application{
 		tabulka = new TableView<Brigada>(model.brigady.get());
 		tabulka.setEditable(true);
 		
-		TableColumn<Brigada, LocalDate> 
-		return null;
+		TableColumn<Brigada, LocalDate> datumColumn = new TableColumn<>("Datum");
+		datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));
+		datumColumn.setCellFactory(cellData -> new FormattedDateTableCell<>());
+		
+		tabulka.getColumns().addAll(datumColumn);
+		tabulka.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		
+		return tabulka;
 	}
 
 	private Node getMenu() {
