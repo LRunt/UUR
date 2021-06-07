@@ -15,6 +15,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -23,8 +25,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Brigada;
 import model.DataModel;
@@ -39,12 +39,14 @@ import utils.Message;
 public class Main extends Application{
 	
 	private TableView<Brigada> tabulka;
-	private DataModel model = new DataModel();
+	public static DataModel model = new DataModel();
 	public static Message zprava = new Message();
+	private SeznamOsob osoby= new SeznamOsob();
+	private SeznamStromu stromy = new SeznamStromu();
 	
-	private ComboBox osobaCB;
+	private ComboBox<Osoba> osobaCB;
 	private DatePicker datumDP;
-	private ComboBox stromCB;
+	private ComboBox<Strom> stromCB;
 	private TextField pocetTF;
 	private TextField casTF;
 	
@@ -70,6 +72,8 @@ public class Main extends Application{
 		primaryStage.setMinHeight(300);
 		primaryStage.setMinWidth(600);
 		primaryStage.show();
+		
+		//primaryStage.setOnCloseRequest(e -> {Platform.wait();});
 	}
 
 	private Scene getScene() {
@@ -99,14 +103,14 @@ public class Main extends Application{
 		
 		Label osobaLB = new Label("Osoba");
 		ovladani.add(osobaLB, 1, 0);
-		osobaCB = new ComboBox();
+		osobaCB = new ComboBox<Osoba>();
 		osobaCB.getItems().setAll(model.brigadnici);
 		osobaCB.setMinWidth(100);
 		ovladani.add(osobaCB, 1, 1);
 		
 		Label stromLB = new Label("Strom");
 		ovladani.add(stromLB, 2, 0);
-		stromCB = new ComboBox();
+		stromCB = new ComboBox<Strom>();
 		stromCB.getItems().setAll(model.stromy);
 		stromCB.setMinWidth(100);
 		ovladani.add(stromCB, 2, 1);
@@ -132,7 +136,7 @@ public class Main extends Application{
 		zrusBT.setOnAction(e -> zrus());
 		ovladani.add(zrusBT, 6, 1);
 		
-		ovladani.setPadding(new Insets(5));
+		ovladani.setPadding(new Insets(10));
 		ovladani.setAlignment(Pos.CENTER);
 		return ovladani;
 	}
@@ -142,7 +146,7 @@ public class Main extends Application{
 		String casSTR = casTF.getText();
 		casSTR.replace(',', '.');
 		double cas;
-		if(datumDP == null || osobaCB == null || stromCB == null || pocetTF == null || casTF == null) {
+		if(datumDP.getValue() == null || osobaCB.getValue() == null || stromCB.getValue() == null || pocetTF.getText() == null || casTF.getText() == null) {
 			zprava.showErrorDialog("Nejsou vyplneny vsechny udaje pro vytvoreni!");
 			return;
 		}
@@ -156,6 +160,10 @@ public class Main extends Application{
 			cas = Double.parseDouble(casTF.getText());
 		}catch(Exception ex) {
 			zprava.showErrorDialog("Udaj o casu neni cislo!");
+			return;
+		}
+		if(cas < 0.5 || cas > 0.8) {
+			zprava.showErrorDialog("Cas muze byt jen v rozsahu 0.5 - 0.8");
 			return;
 		}
 		try {
@@ -175,6 +183,7 @@ public class Main extends Application{
 		pocetTF.setText(null);
 	}
 
+	@SuppressWarnings("unchecked")
 	private Node getTabulka() {
 		tabulka = new TableView<Brigada>(model.brigady.get());
 		tabulka.setEditable(true);
@@ -211,8 +220,19 @@ public class Main extends Application{
 	}
 
 	private Node getMenu() {
-		// TODO Auto-generated method stub
-		return null;
+		MenuBar menu = new MenuBar();
+		
+		Label osobaLB = new Label("Osoby");
+		osobaLB.setOnMouseClicked(e -> osoby.showDialog());
+		Menu OsobaM = new Menu("", osobaLB); 
+		
+		Label stromLB = new Label("Stromy");
+		stromLB.setOnMouseClicked(e -> stromy.showDialog());
+		Menu StromM = new Menu("", stromLB);
+		
+		menu.getMenus().addAll(OsobaM, StromM);
+		
+		return menu;
 	}
 
 }

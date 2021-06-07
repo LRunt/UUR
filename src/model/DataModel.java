@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 
 public class DataModel {
 	
@@ -12,6 +13,10 @@ public class DataModel {
 	public ListProperty<Osoba> brigadnici = new SimpleListProperty<>(FXCollections.observableArrayList());
 	public ListProperty<Strom> stromy = new SimpleListProperty<>(FXCollections.observableArrayList());
 	
+	public DataModel() {
+		brigady.addListener((ListChangeListener<Brigada>) change -> prepocti());
+	}
+
 	public void initializeModel() {
 		brigadnici.clear();
 		brigadnici.add(new Osoba("Petr Maly", 0.0, 0));
@@ -26,5 +31,17 @@ public class DataModel {
 		brigady.add(new Brigada(brigadnici.get(0), stromy.get(0), LocalDate.of(2020, 1, 8), 10, 0.5));
 		brigady.add(new Brigada(brigadnici.get(1), stromy.get(2), LocalDate.of(2021, 4, 25), 20, 0.8));
 		brigady.add(new Brigada(brigadnici.get(1), stromy.get(1), LocalDate.of(2020, 6, 6), 15, 0.6));
+	}
+	
+	public void prepocti() {
+		for(Osoba brigadnik : brigadnici) {
+			int sum = (brigady.stream().filter(a -> a.getOsoba().equals(brigadnik)).map(a -> a.getPocet()).reduce(0, Integer::sum));
+			brigadnik.setPocet(sum);
+		}
+		
+		for(Strom strom : stromy) {
+			int sum = (brigady.stream().filter(a -> a.getStrom().equals(strom)).map(a -> a.getPocet()).reduce(0,  Integer::sum));
+			strom.setPocet(sum);
+		}
 	}
 }

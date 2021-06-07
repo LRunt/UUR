@@ -88,6 +88,7 @@ public class FormattedIntTableCell<S, T> extends TableCell<S, Integer>{
 	@Override
 	public void commitEdit(Integer newValue) {
 		super.commitEdit(newValue);
+		Main.model.prepocti();
 		
 		setGraphic(renderLB);
 	}

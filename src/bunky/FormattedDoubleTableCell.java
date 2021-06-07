@@ -72,10 +72,12 @@ public class FormattedDoubleTableCell<S, T> extends TableCell<S, Double> {
 					renderLB.setText("0");
 				}
 			} else {
+				String itemSTR = item.toString();
+				itemSTR.replace('.', ',');
 				if(isEditing()) {
 					editTF.setText(item.toString());
 				} else {
-					renderLB.setText(item.toString() + units);
+					renderLB.setText(itemSTR + units);
 				}
 			}
 		}
