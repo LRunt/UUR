@@ -47,4 +47,8 @@ public class Strom {
 	public IntegerProperty pocetProperty() {
 		return pocet;
 	}
+	//-----------toString------------------------
+	public String toString() {
+		return String.format("%s", getNazev());
+	}
 }

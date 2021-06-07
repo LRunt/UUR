@@ -9,13 +9,13 @@ import javafx.collections.FXCollections;
 public class DataModel {
 	
 	public ListProperty<Brigada> brigady = new SimpleListProperty<>(FXCollections.observableArrayList());
-	public ListProperty<Osoba> brigadnici = new SimpleListProperty<>();
-	public ListProperty<Strom> stromy = new SimpleListProperty<>();
+	public ListProperty<Osoba> brigadnici = new SimpleListProperty<>(FXCollections.observableArrayList());
+	public ListProperty<Strom> stromy = new SimpleListProperty<>(FXCollections.observableArrayList());
 	
 	public void initializeModel() {
 		brigadnici.clear();
-		brigadnici.add(new Osoba("Petr Maly", 0));
-		brigadnici.add(new Osoba("Pavel Kraus", 0));
+		brigadnici.add(new Osoba("Petr Maly", 0.0, 0));
+		brigadnici.add(new Osoba("Pavel Kraus", 0.0, 0));
 		
 		stromy.clear();
 		stromy.add(new Strom("Smrk", 0));

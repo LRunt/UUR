@@ -30,9 +30,10 @@ public class Brigada {
 		@Override
 		protected String computeValue() {
 		if ((pocet != null) && (cas != null)) {
-			int minuty = (int)(cas.get() * 60);
-			int sekundy = (int)(((cas.get() * 60) - minuty) * 60);
-			return String.format("00:%d:%d", minuty, sekundy);
+			double jedenStrom = cas.get()/pocet.get();
+			int minuty = (int)(jedenStrom * 60);
+			int sekundy = (int)(((jedenStrom * 60) - minuty) * 60);
+			return String.format("00:%02d:%02d", minuty, sekundy);
 		}
 		else {
 			return null;
